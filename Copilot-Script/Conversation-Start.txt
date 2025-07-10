@@ -1,0 +1,39 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnConversationStart
+  id: main
+  actions:
+    - kind: SendActivity
+      id: sendActivity_C0dt8q
+      activity: Welcome! I’m Agent, here to streamline your experience.
+
+    - kind: HttpRequestAction
+      id: T4gQLR
+      method: Post
+      url: <hosted endpoint for api call>
+      headers:
+        Content-Type: application/json
+
+      body:
+        kind: JsonRequestContent
+        content:
+          kind: ValueExpression
+          literalValue:
+            password: password
+            username: user
+
+      errorHandling:
+        kind: ContinueOnErrorBehavior
+        statusCode: Topic.ErrorStatus
+        errorResponseBody: Topic.ErrorResponse
+
+      response: Global.JWTToken
+      responseSchema:
+        kind: Record
+        properties:
+          access_token: String
+          token_type: String
+
+    - kind: BeginDialog
+      id: 3Pu7LS
+      dialog: <bot name>.topic.QueryStart

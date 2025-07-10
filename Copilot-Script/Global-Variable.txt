@@ -1,0 +1,25 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  actions:
+    - kind: Question
+      id: question_kFyex2
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: init:Global.username
+      prompt:
+      entity: StringPrebuiltEntity
+
+    - kind: Question
+      id: question_N8buV0
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: Global.token
+      prompt:
+      entity: StringPrebuiltEntity
+
+    - kind: EndDialog
+      id: 2zmVyV

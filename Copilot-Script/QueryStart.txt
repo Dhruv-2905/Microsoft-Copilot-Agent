@@ -1,0 +1,570 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent: {}
+  actions:
+    - kind: Question
+      id: question_iMOJzB
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: init:Topic.Query2
+      prompt: I'm here to assist you with your queries
+      entity: StringPrebuiltEntity
+
+    - kind: ConditionGroup
+      id: conditionGroup_xPTPOE
+      conditions:
+        - id: conditionItem_Uw5VVg
+          condition: =If("PO" in Topic.Query2, true, false) && Len(Topic.Query2) < 10
+          actions:
+            - kind: SendActivity
+              id: sendActivity_7MKuEK
+              activity: I didn’t quite catch that. Please rephrase your question or pick from the available options to continue.
+
+            - kind: Question
+              id: question_Qn3JrB
+              displayName: Muiltiple Question
+              interruptionPolicy:
+                allowInterruption: true
+
+              variable: Topic.Var1
+              prompt:
+                quickReplies:
+                  - kind: MessageBack
+                    text: Give me my Open POs?
+
+                  - kind: MessageBack
+                    text: Give me all the information for Open POs?
+
+                  - kind: MessageBack
+                    text: Give me list of rejected items from all the POs?
+
+              entity: StringPrebuiltEntity
+
+            - kind: HttpRequestAction
+              id: 6wgPUN
+              method: Post
+              url:<endpoint >
+              headers:
+                Authorization: =Global.JWTToken.access_token
+
+              body:
+                kind: JsonRequestContent
+                content: |-
+                  ={
+                      question:Text(Topic.Var1),
+                      name:Global.username
+                  }
+
+              errorHandling:
+                kind: ContinueOnErrorBehavior
+
+              response: Topic.ChoiceResponse
+              responseSchema: Any
+
+            - kind: ConditionGroup
+              id: conditionGroup_7yifXd
+              conditions:
+                - id: conditionItem_aIAExu
+                  condition: =IsBlank(Topic.ChoiceResponse)
+                  actions:
+                    - kind: GotoAction
+                      id: eozoXZ
+                      actionId: sendActivity_7MKuEK
+
+            - kind: SendActivity
+              id: sendActivity_zZQUtE
+              activity: "{Topic.ChoiceResponse}"
+
+            - kind: BeginDialog
+              id: nHGCjm
+              dialog: agentname.topic.Query
+
+        - id: conditionItem_GDLlmA
+          condition: =If("GRN" in Topic.Query2, true, false) && Len(Topic.Query2) < 13
+          actions:
+            - kind: SendActivity
+              id: sendActivity_Uwf61E
+              activity: I didn’t quite catch that. Please rephrase your question or pick from the available options to continue.
+
+            - kind: Question
+              id: question_9asuAP
+              displayName: Multiple Question
+              interruptionPolicy:
+                allowInterruption: true
+
+              variable: Topic.Var2
+              prompt:
+                quickReplies:
+                  - kind: MessageBack
+                    text: Total received quantity for the GRN?
+
+                  - kind: MessageBack
+                    text: Give me list of my GRN?
+
+                  - kind: MessageBack
+                    text: Give me total count of GRN?
+
+              entity: StringPrebuiltEntity
+
+            - kind: HttpRequestAction
+              id: xpajP8
+              method: Post
+              url:<endpoint >
+              headers:
+                Authorization: =Global.JWTToken.access_token
+
+              body:
+                kind: JsonRequestContent
+                content: |-
+                  ={
+                      question:Text(Topic.Var2),
+                      name:Global.username
+                  }
+
+              errorHandling:
+                kind: ContinueOnErrorBehavior
+
+              response: Topic.ChoiceResponse2
+              responseSchema: Any
+
+            - kind: ConditionGroup
+              id: conditionGroup_TYQ0E3
+              conditions:
+                - id: conditionItem_Gugfya
+                  condition: =IsBlank(Topic.ChoiceResponse2)
+                  actions:
+                    - kind: GotoAction
+                      id: hVcJOI
+                      actionId: sendActivity_Uwf61E
+
+            - kind: SendActivity
+              id: sendActivity_9VuEM1
+              activity: "{Topic.ChoiceResponse2}"
+
+            - kind: BeginDialog
+              id: 2sAPGm
+              dialog: agentname.topic.Query
+
+        - id: conditionItem_4OjP82
+          condition: =If("ASN" in Topic.Query2, true, false) && Len(Topic.Query2) < 13
+          actions:
+            - kind: SendActivity
+              id: sendActivity_YQDSTm
+              activity: I didn’t quite catch that. Please rephrase your question or pick from the available options to continue.
+
+            - kind: Question
+              id: question_exg6aL
+              displayName: Multiple Question
+              interruptionPolicy:
+                allowInterruption: true
+
+              variable: Topic.Var4
+              prompt:
+                quickReplies:
+                  - kind: MessageBack
+                    text: Give me my ASN Count ?
+
+                  - kind: MessageBack
+                    text: Give me all the information for the ASN
+
+              entity: StringPrebuiltEntity
+
+            - kind: HttpRequestAction
+              id: Nw7CIe
+              method: Post
+              url:<endpoint >
+              headers:
+                Authorization: =Global.JWTToken.access_token
+
+              body:
+                kind: JsonRequestContent
+                content: |-
+                  ={
+                      question:Text(Topic.Var4),
+                      name:Global.username
+                  }
+
+              errorHandling:
+                kind: ContinueOnErrorBehavior
+
+              response: Topic.ChoiceResponse3
+              responseSchema: Any
+
+            - kind: ConditionGroup
+              id: conditionGroup_FZ4bTI
+              conditions:
+                - id: conditionItem_aKGpHK
+                  condition: =IsBlank(Topic.ChoiceResponse3)
+                  actions:
+                    - kind: GotoAction
+                      id: NiSBim
+                      actionId: sendActivity_YQDSTm
+
+            - kind: SendActivity
+              id: sendActivity_albZOj
+              activity: "{Topic.ChoiceResponse3}"
+
+            - kind: BeginDialog
+              id: y8V8xU
+              dialog: agentname.topic.Query
+
+        - id: conditionItem_VuF8JH
+          condition: =Len(Topic.Query2) < 13
+          actions:
+            - kind: SendActivity
+              id: sendActivity_ivHmLd
+              activity: I didn’t quite catch that. Please rephrase your question or pick from the available options to continue.
+
+            - kind: Question
+              id: question_A1cpjs
+              interruptionPolicy:
+                allowInterruption: true
+
+              variable: init:Topic.Var9
+              prompt:
+                quickReplies:
+                  - kind: MessageBack
+                    text: Give me my Open POs?
+
+                  - kind: MessageBack
+                    text: Give me list of my GRN?
+
+                  - kind: MessageBack
+                    text: Give me my ASN Count
+
+                  - kind: MessageBack
+                    text: Give me list of item names?
+
+              entity: StringPrebuiltEntity
+
+            - kind: HttpRequestAction
+              id: vEhHiJ
+              method: Post
+              url:<endpoint >
+              headers:
+                Authorization: =Global.JWTToken.access_token
+
+              body:
+                kind: JsonRequestContent
+                content: |-
+                  ={
+                      question:Text(Topic.Var9),
+                      name:Global.username
+                  }
+
+              errorHandling:
+                kind: ContinueOnErrorBehavior
+
+              response: Topic.ChoiceResponse4
+              responseSchema: Any
+
+            - kind: ConditionGroup
+              id: conditionGroup_IeN2gt
+              conditions:
+                - id: conditionItem_otLOCt
+                  condition: =IsBlank(Topic.ChoiceResponse4)
+                  actions:
+                    - kind: GotoAction
+                      id: sYQJXd
+                      actionId: sendActivity_ivHmLd
+
+            - kind: SendActivity
+              id: sendActivity_UgdlBX
+              activity: "{Topic.ChoiceResponse4}"
+
+            - kind: BeginDialog
+              id: cqXbjR
+              dialog: agentname.topic.Query
+
+    - kind: HttpRequestAction
+      id: IKlN0A
+      latencyMessageSettings:
+        allowLatencyMessage: false
+
+      method: Post
+      url:<endpoint >
+      headers:
+        Authorization: =Global.JWTToken.access_token
+
+      body:
+        kind: JsonRequestContent
+        content: |-
+          ={
+              question:Topic.Query2,
+              name:Global.username
+          }
+
+      errorHandling:
+        kind: ContinueOnErrorBehavior
+
+      response: Topic.QueryResponse2
+      responseSchema: Any
+
+    - kind: ConditionGroup
+      id: conditionGroup_LniFpF
+      conditions:
+        - id: conditionItem_thPBCJ
+          condition: =IsBlank(Topic.QueryResponse2)
+          actions:
+            - kind: SendActivity
+              id: sendActivity_FZkiXO
+              activity: There is no Data for your requirements , can you please be more specific for better assistance.
+
+            - kind: ConditionGroup
+              id: conditionGroup_jEZmU2
+              conditions:
+                - id: conditionItem_rz5spt
+                  condition: =If("PO" in Topic.Query2, true, false)
+                  actions:
+                    - kind: Question
+                      id: question_OML4ma
+                      interruptionPolicy:
+                        allowInterruption: true
+
+                      variable: Topic.Var5
+                      prompt:
+                        quickReplies:
+                          - kind: MessageBack
+                            text: Give me my Open POs?
+
+                          - kind: MessageBack
+                            text: Give me all the information for my Open POs?
+
+                          - kind: MessageBack
+                            text: Give me list of rejected items from all the POs?
+
+                      entity: StringPrebuiltEntity
+
+                    - kind: HttpRequestAction
+                      id: FodK5O
+                      method: Post
+                      url:<endpoint >
+                      headers:
+                        Authorization: =Global.JWTToken.access_token
+
+                      body:
+                        kind: JsonRequestContent
+                        content: |-
+                          ={
+                              question:Text(Topic.Var5),
+                              name:Global.username
+                          }
+
+                      errorHandling:
+                        kind: ContinueOnErrorBehavior
+
+                      response: Topic.ChoiceResponse
+                      responseSchema: Any
+
+                    - kind: ConditionGroup
+                      id: conditionGroup_gIVaAa
+                      conditions:
+                        - id: conditionItem_8Iz5Og
+                          condition: =IsBlank(Topic.ChoiceResponse)
+                          actions:
+                            - kind: GotoAction
+                              id: W3GxiL
+                              actionId: sendActivity_FZkiXO
+
+                    - kind: SendActivity
+                      id: sendActivity_yFx0bG
+                      activity: "{Topic.ChoiceResponse}"
+
+                    - kind: BeginDialog
+                      id: YHSgva
+                      dialog: agentname.topic.Query
+
+                - id: conditionItem_B0s68o
+                  condition: =If("GRN" in Topic.Query2, true, false)
+                  actions:
+                    - kind: Question
+                      id: question_2n3b3B
+                      interruptionPolicy:
+                        allowInterruption: true
+
+                      variable: init:Topic.Var6
+                      prompt:
+                        quickReplies:
+                          - kind: MessageBack
+                            text: Total Received Quantity for the GRN?
+
+                          - kind: MessageBack
+                            text: Give me list of my GRN?
+
+                          - kind: MessageBack
+                            text: Give me total count count of GRN?
+
+                      entity: StringPrebuiltEntity
+
+                    - kind: HttpRequestAction
+                      id: Pyy4FI
+                      method: Post
+                      url:<endpoint >
+                      headers:
+                        Authorization: =Global.JWTToken.access_token
+
+                      body:
+                        kind: JsonRequestContent
+                        content: |-
+                          ={
+                              question:Text(Topic.Var6),
+                              name:Global.username
+                          }
+
+                      errorHandling:
+                        kind: ContinueOnErrorBehavior
+
+                      response: Topic.ChoiceResponse2
+                      responseSchema: Any
+
+                    - kind: ConditionGroup
+                      id: conditionGroup_1aBz7n
+                      conditions:
+                        - id: conditionItem_PN2fAA
+                          condition: =IsBlank(Topic.ChoiceResponse2)
+                          actions:
+                            - kind: GotoAction
+                              id: 4jvfVe
+                              actionId: sendActivity_FZkiXO
+
+                    - kind: SendActivity
+                      id: sendActivity_Wvlh4I
+                      activity: "{Topic.ChoiceResponse2}"
+
+                    - kind: BeginDialog
+                      id: fTIsWO
+                      dialog: agentname.topic.Query
+
+                - id: conditionItem_Kmr5fr
+                  condition: =If("ASN" in Topic.Query2, true, false)
+                  actions:
+                    - kind: Question
+                      id: question_6ns5yF
+                      interruptionPolicy:
+                        allowInterruption: true
+
+                      variable: init:Topic.Var7
+                      prompt:
+                        quickReplies:
+                          - kind: MessageBack
+                            text: Give me my ASN Count?
+
+                          - kind: MessageBack
+                            text: Give me all the information for the ASN?
+
+                      entity: StringPrebuiltEntity
+
+                    - kind: HttpRequestAction
+                      id: 1r5rxn
+                      method: Post
+                      url:<endpoint >
+                      headers:
+                        Authorization: =Global.JWTToken.access_token
+
+                      body:
+                        kind: JsonRequestContent
+                        content: |-
+                          ={
+                              question:Text(Topic.Var7),
+                              name:Global.username
+                          }
+
+                      errorHandling:
+                        kind: ContinueOnErrorBehavior
+
+                      response: Topic.ChoiceResponse3
+                      responseSchema: Any
+
+                    - kind: ConditionGroup
+                      id: conditionGroup_RShzRp
+                      conditions:
+                        - id: conditionItem_JUobB3
+                          condition: =IsBlank(Topic.ChoiceResponse3)
+                          actions:
+                            - kind: GotoAction
+                              id: 50B3h9
+                              actionId: sendActivity_FZkiXO
+
+                    - kind: SendActivity
+                      id: sendActivity_tvS8D2
+                      activity: "{Topic.ChoiceResponse3}"
+
+                    - kind: BeginDialog
+                      id: EIocqh
+                      dialog: agentname.topic.Query
+
+              elseActions:
+                - kind: Question
+                  id: question_vxvEjE
+                  interruptionPolicy:
+                    allowInterruption: true
+
+                  variable: init:Topic.Var8
+                  prompt:
+                    quickReplies:
+                      - kind: MessageBack
+                        text: Give me my Open POs?
+
+                      - kind: MessageBack
+                        text: Total Received Quantity for the GRN?
+
+                      - kind: MessageBack
+                        text: Give me Total ASN Items?
+
+                      - kind: MessageBack
+                        text: Give me list of my Item names?
+
+                  entity: StringPrebuiltEntity
+
+                - kind: HttpRequestAction
+                  id: iBKRyp
+                  method: Post
+                  url:<endpoint >
+                  headers:
+                    Authorization: =Global.JWTToken.access_token
+
+                  body:
+                    kind: JsonRequestContent
+                    content: |-
+                      ={
+                          question:Text(Topic.Var8),
+                          name:Global.username
+                      }
+
+                  errorHandling:
+                    kind: ContinueOnErrorBehavior
+
+                  response: Topic.ChoiceResponse4
+                  responseSchema: Any
+
+                - kind: ConditionGroup
+                  id: conditionGroup_ASZnfg
+                  conditions:
+                    - id: conditionItem_sR6FTR
+                      condition: =IsBlank(Topic.ChoiceResponse4)
+                      actions:
+                        - kind: GotoAction
+                          id: twDMjF
+                          actionId: sendActivity_FZkiXO
+
+                - kind: SendActivity
+                  id: sendActivity_H7LJwK
+                  activity: "{Topic.ChoiceResponse4}"
+
+                - kind: BeginDialog
+                  id: okXnWd
+                  dialog: agentname.topic.Query
+
+    - kind: SendActivity
+      id: sendActivity_fBxcQb
+      activity: "{Topic.QueryResponse2}"
+
+    - kind: BeginDialog
+      id: ePjzsc
+      dialog: agentname.topic.Query
+
+inputType: {}
+outputType: {}
